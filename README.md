@@ -14,7 +14,7 @@ To help you explore the design space, we will hold events such as feedback sessi
 Proposals / Idea Generation
 ---
 
-Submit project ideas using [this Google Form](https://docs.google.com/forms/d/e/1FAIpQLSc72vId8keotkEvLrB9Ef3Nt0e1uh_-mWmQ5okyPM5_q2a89Q/viewform?usp=sf_link).
+Submit project ideas using [this Google Form](https://docs.google.com/forms/d/e/1FAIpQLSf2XmuFaKkR8k2aJ0ZjzVywih0R07dfO_NjVMcm8ZUwGrwoLg/viewform?usp=publish-editor).
 
 You're encouraged to submit many ideas-- staff will help you identify the most promising ones and possible roadblocks.
 
