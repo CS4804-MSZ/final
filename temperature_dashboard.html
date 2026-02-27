@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Data Vis Temp</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f4efe6;
+      --card: #fffef9;
+      --border: #e0d9cc;
+      --text: #1c1c1c;
+      --muted: #999;
+      --red: #d44032;
+      --blue: #2c7bb6;
+      --accent: #1c1c1c;
+    }
+
+    body {
+      background: var(--bg);
+      min-height: 100vh;
+      font-family: 'Arial', serif;
+      color: var(--text);
+      padding: 0;
+    }
+
+    header {
+      background: var(--bg);
+      color: #f4efe6;
+      padding: 24px 48px;
+      display: flex;
+      align-items: baseline;
+      gap: 20px;
+    }
+    header h1 {
+      font-family: 'Arial', serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 24px 60px;
+      display: flex;
+      flex-direction: column;
+      gap: 36px;
+    }
+
+    .date-section {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .date-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .date-controls {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    select, input[type=date] {
+      font-family: 'Arial', serif;
+      font-size: 0.85rem;
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 16px;
+      color: var(--text);
+      cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    select:focus, input[type=date]:focus { outline: 2px solid var(--accent); }
+    #date-select { min-width: 200px; }
+
+    .day-info {
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 20px;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    .day-info strong { color: var(--text); font-weight: 500; }
+
+    .thermo-section {
+      display: flex;
+      justify-content: center;
+      gap: 60px;
+      flex-wrap: wrap;
+    }
+
+    .thermo-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    .thermo-title {
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .thermo-badge {
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 20px;
+      text-align: center;
+    }
+    .thermo-badge .f-val {
+      font-size: 1.3rem;
+      font-weight: 500;
+    }
+    .thermo-badge .c-val {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+    .badge-cold .f-val { color: var(--blue); }
+    .badge-hot  .f-val { color: var(--red);  }
+
+    #loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 120px;
+      font-size: 0.8rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+    }
+
+    .freeze-line { stroke-dasharray: 4,4; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Data Vis Temp Prj</h1>
+</header>
+
+<main>
+  <div id="loading">Loading dataset…</div>
+
+  <div id="app" style="display:none; flex-direction:column; gap:36px;">
+
+    <div class="date-section">
+      <div class="date-label">Select a date</div>
+      <div class="date-controls">
+        <select id="date-select"></select>
+      </div>
+      <div class="day-info" id="day-info">Pick a date to get temp data</div>
+    </div>
+
+    <div class="thermo-section">
+      <div class="thermo-card">
+        <div class="thermo-title">Min Temp of Day</div>
+        <svg id="thermo-min"></svg>
+        <div class="thermo-badge" id="badge-min">
+          <div class="f-val">—</div>
+          <div class="c-val">—</div>
+        </div>
+      </div>
+      <div class="thermo-card">
+        <div class="thermo-title">Max Temp of Day</div>
+        <svg id="thermo-max"></svg>
+        <div class="thermo-badge" id="badge-max">
+          <div class="f-val">—</div>
+          <div class="c-val">—</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<script>
+// Thermometer geometry
+const TW = 200, TH = 500;
+const tubeX = TW / 2;
+const tubeW = 22;
+const bulbR = 28;
+const bulbCY = TH - 60;
+const tubeTopY = 60;
+const tubeBottomY = bulbCY - bulbR + 4;
+const tubeH = tubeBottomY - tubeTopY;
+
+const fMin = -20, fMax = 120;
+const fToY = d3.scaleLinear().domain([fMin, fMax]).range([tubeBottomY, tubeTopY]);
+const fTicks = d3.range(fMin, fMax + 1, 20);
+const cTicks = d3.range(-30, 51, 10);
+const cToF = c => c * 9/5 + 32;
+const fToC = f => (f - 32) * 5/9;
+
+function buildThermometer(id, gradId) {
+  const svg = d3.select(`#${id}`)
+    .attr("width", TW).attr("height", TH)
+    .attr("viewBox", `0 0 ${TW} ${TH}`)
+    .style("filter", "drop-shadow(3px 6px 18px rgba(0,0,0,0.1))");
+
+  const defs = svg.append("defs");
+
+  const grad = defs.append("linearGradient")
+    .attr("id", `mercGrad-${gradId}`).attr("x1","0%").attr("x2","100%");
+  grad.append("stop").attr("class","merc-stop-left").attr("offset","0%");
+  grad.append("stop").attr("class","merc-stop-mid").attr("offset","50%");
+  grad.append("stop").attr("class","merc-stop-right").attr("offset","100%");
+
+  const glass = defs.append("linearGradient")
+    .attr("id", `glassGrad-${gradId}`).attr("x1","0%").attr("x2","100%");
+  glass.append("stop").attr("offset","0%").attr("stop-color","#d4eaff").attr("stop-opacity","0.9");
+  glass.append("stop").attr("offset","40%").attr("stop-color","#eef6ff").attr("stop-opacity","0.5");
+  glass.append("stop").attr("offset","100%").attr("stop-color","#c8dff0").attr("stop-opacity","0.7");
+
+  defs.append("clipPath").attr("id",`clip-${gradId}`)
+    .append("rect")
+      .attr("x", tubeX - tubeW/2 + 2).attr("y", tubeTopY)
+      .attr("width", tubeW - 4).attr("height", tubeH);
+
+  // Tube background
+  svg.append("rect")
+    .attr("x", tubeX - tubeW/2).attr("y", tubeTopY)
+    .attr("width", tubeW).attr("height", tubeH)
+    .attr("rx", tubeW/2).attr("ry", tubeW/2)
+    .attr("fill","#e8f0f8").attr("stroke","#b0c4de").attr("stroke-width",1.5);
+
+  // Mercury rect (clipped)
+  const mercury = svg.append("rect")
+    .attr("class","mercury")
+    .attr("x", tubeX - tubeW/2 + 2)
+    .attr("y", tubeBottomY)
+    .attr("width", tubeW - 4)
+    .attr("height", 0)
+    .attr("clip-path", `url(#clip-${gradId})`);
+
+  // Glass overlay
+  svg.append("rect")
+    .attr("x", tubeX - tubeW/2).attr("y", tubeTopY)
+    .attr("width", tubeW).attr("height", tubeH)
+    .attr("rx", tubeW/2).attr("ry", tubeW/2)
+    .attr("fill", `url(#glassGrad-${gradId})`)
+    .attr("stroke","#b0c4de").attr("stroke-width",1.5)
+    .attr("pointer-events","none");
+
+  // Freeze line
+  const fy32 = fToY(32);
+  svg.append("line")
+    .attr("class","freeze-line")
+    .attr("x1", tubeX - tubeW/2 - 22).attr("x2", tubeX + tubeW/2 + 22)
+    .attr("y1", fy32).attr("y2", fy32)
+    .attr("stroke","#3355FF").attr("stroke-width",1).attr("opacity",1);
+  svg.append("text")
+    .attr("x", tubeX - tubeW/2 - 24).attr("y", fy32 - 4)
+    .attr("text-anchor","end").attr("font-size","9px")
+    .attr("fill","#3355FF").attr("font-family","Arial, serif")
+    .text("freeze");
+
+  svg.append("rect").attr("class","bulb-patch")
+    .attr("x", tubeX - tubeW/2 + 2).attr("y", tubeBottomY - 2)
+    .attr("width", tubeW - 4)
+    .attr("height", bulbCY - tubeBottomY + bulbR - 2);
+
+  svg.append("circle").attr("class","bulb")
+    .attr("cx", tubeX).attr("cy", bulbCY).attr("r", bulbR)
+    .attr("stroke-width", 2);
+
+  // F ticks
+  const tickLen = 10, majLen = 16;
+  fTicks.forEach(f => {
+    const y = fToY(f);
+    svg.append("line")
+      .attr("x1", tubeX - tubeW/2 - 2)
+      .attr("x2", tubeX - tubeW/2 - 2 - majLen)
+      .attr("y1",y).attr("y2",y)
+      .attr("stroke","#555").attr("stroke-width",1.5);
+    svg.append("text")
+      .attr("x", tubeX - tubeW/2 - majLen - 5)
+      .attr("y", y + 4).attr("text-anchor","end")
+      .attr("font-family",'Arial, serif').attr("font-size","11px")
+      .attr("fill","#333").text(`${f}°`);
+  });
+  svg.append("text")
+    .attr("x", tubeX - tubeW/2 - majLen - 5).attr("y", tubeTopY - 14)
+    .attr("text-anchor","end").attr("font-family","Arial, serif")
+    .attr("font-size","13px").attr("font-weight","700").attr("fill","#c0392b")
+    .text("°F");
+
+  // C ticks
+  cTicks.forEach(c => {
+    const f = cToF(c);
+    if (f < fMin || f > fMax) return;
+    const y = fToY(f);
+    svg.append("line")
+      .attr("x1", tubeX + tubeW/2 + 2)
+      .attr("x2", tubeX + tubeW/2 + 2 + majLen)
+      .attr("y1",y).attr("y2",y)
+      .attr("stroke","#555").attr("stroke-width",1.5);
+    svg.append("text")
+      .attr("x", tubeX + tubeW/2 + majLen + 5)
+      .attr("y", y + 4).attr("text-anchor","start")
+      .attr("font-family",'Arial, serif').attr("font-size","11px")
+      .attr("fill","#333").text(`${c}°`);
+  });
+  svg.append("text")
+    .attr("x", tubeX + tubeW/2 + majLen + 5).attr("y", tubeTopY - 14)
+    .attr("text-anchor","start").attr("font-family","Arial, serif")
+    .attr("font-size","13px").attr("font-weight","700").attr("fill","#2980b9")
+    .text("°C");
+
+  return { svg, mercury };
+}
+
+function setTemp(svgSel, mercury, gradId, targetF, prevF, duration=1400) {
+  const isHot = targetF >= 32;
+  const col1 = isHot ? "#c0392b" : "#1a5fa8";
+  const col2 = isHot ? "#ff6b6b" : "#4d9de0";
+  const col3 = isHot ? "#e74c3c" : "#2c7bb6";
+
+  svgSel.selectAll(`.merc-stop-left`).attr("stop-color", col1);
+  svgSel.selectAll(`.merc-stop-mid`).attr("stop-color", col2);
+  svgSel.selectAll(`.merc-stop-right`).attr("stop-color", col3);
+  svgSel.select(".bulb").attr("fill", col2).attr("stroke", col1);
+  svgSel.select(".bulb-patch").attr("fill", col2);
+
+  mercury.attr("fill", `url(#mercGrad-${gradId})`);
+
+  const startF = prevF !== undefined ? prevF : targetF;
+  const startTime = Date.now();
+
+  function frame() {
+    const elapsed = Date.now() - startTime;
+    const t = Math.min(elapsed / duration, 1);
+    const ease = t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2,3)/2;
+    const curF = startF + (targetF - startF) * ease;
+    const y = fToY(curF);
+    mercury.attr("y", y).attr("height", tubeBottomY - y + 4);
+    if (t < 1) requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+
+function updateBadge(badgeId, f) {
+  const el = document.getElementById(badgeId);
+  const c = fToC(f).toFixed(1);
+  el.querySelector(".f-val").textContent = `${f}°F`;
+  el.querySelector(".c-val").textContent = `${c}°C`;
+  el.className = "thermo-badge " + (f >= 32 ? "badge-hot" : "badge-cold");
+}
+
+const thermos = {
+  min: buildThermometer("thermo-min", "min"),
+  max: buildThermometer("thermo-max", "max"),
+};
+
+let allData = [];
+let prevMin, prevMax;
+
+// CSV LOADDD
+d3.csv("synthetic_weather.csv").then(raw => {
+  const data = raw.map(d => ({
+    DATE: d.DATE,
+    TMAX: d.TMAX !== "" ? +d.TMAX / 10 * 9/5 + 32 : null,
+    TMIN: d.TMIN !== "" ? +d.TMIN / 10 * 9/5 + 32 : null,
+  }));
+
+  allData = data.filter(d => d.TMAX !== null && d.TMIN !== null);
+
+  const step = Math.max(1, Math.floor(allData.length / 300));
+  const sampled = allData.filter((_,i) => i % step === 0);
+
+  const sel = d3.select("#date-select");
+  sel.append("option").attr("value","").text("— choose a date —");
+  sampled.forEach(d => {
+    sel.append("option").attr("value", d.DATE).text(d.DATE);
+  });
+
+  document.getElementById("loading").style.display = "none";
+  document.getElementById("app").style.display = "flex";
+
+  sel.on("change", function() {
+    const date = this.value;
+    if (!date) return;
+    const row = allData.find(d => d.DATE === date);
+    if (!row) return;
+
+    document.getElementById("day-info").innerHTML =
+      `<strong>${date}</strong> · Min: <strong>${row.TMIN.toFixed(1)}°F</strong> · Max: <strong>${row.TMAX.toFixed(1)}°F</strong>`;
+
+    setTemp(thermos.min.svg, thermos.min.mercury, "min", row.TMIN, prevMin);
+    setTemp(thermos.max.svg, thermos.max.mercury, "max", row.TMAX, prevMax);
+    updateBadge("badge-min", row.TMIN.toFixed(1));
+    updateBadge("badge-max", row.TMAX.toFixed(1));
+
+    prevMin = row.TMIN;
+    prevMax = row.TMAX;
+  });
+}).catch(err => {
+  document.getElementById("loading").textContent = "Error loading CSV: " + err.message;
+});
+</script>
+</body>
+</html>
