@@ -65,80 +65,130 @@ select{background:var(--card);border:1.5px solid var(--border);border-radius:8px
 .thermo-title{font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
 .thermo-badge{background:var(--card);border:1.5px solid var(--border);border-radius:10px;padding:10px 20px;text-align:center}
 .freeze-line{stroke-dasharray:4,4}
+.page-shell{display:flex;justify-content:center}
+.page-layout{display:grid;grid-template-columns:320px 1fr;gap:48px;align-items:start}
+.text-panel{background:var(--card);border:1.5px solid var(--border);border-radius:18px;padding:28px;line-height:1.6}
+.text-panel h2{font-size:1.2rem;margin-bottom:12px}
+.text-panel p{font-size:.9rem;color:var(--muted)}
+.visual-panel{display:flex;flex-direction:column;gap:48px}
       `}</style>
 
-            <header>
-                <h1>Data Vis Temp Prj</h1>
-            </header>
+            {/*<header>*/}
+            {/*    <h1>Data Vis Temp Prj</h1>*/}
+            {/*</header>*/}
 
             <main>
-                <div className="calendar-row">
-                    <div className="calendar-wrapper">
-                        <DatePicker
-                            value={selectedDate}
-                            onChange={setSelectedDate}
-                            defaultDate={new Date(2010, 0, 1)}
-                            minDate={new Date(2010, 0, 1)}
-                            maxDate={new Date(2023, 11, 31)}
-                        />
-                    </div>
+                <div className="page-shell">
+                    <div className="page-layout">
 
-                    <div className="day-info-card">
-                        {row ? (
-                            <>
-                                <div className="day-info-date">
-                                    {dayjs(row.DATE).format("MMMM Do, YYYY")}
+                        {/* LEFT TEXT AREA */}
+                        <div className="text-panel">
+                            <h2>MSZ Final Project for Data Visualization Course</h2>
+                            <p>
+                                Select a date from the calendar to explore daily temperature
+                                extremes and precipitation levels. This visualization helps
+                                reveal seasonal patterns and weather variability over time.
+                            </p>
+                            <h2>About This Project</h2>
+                            <p>
+                                Select a date from the calendar to explore daily temperature
+                                extremes and precipitation levels. This visualization helps
+                                reveal seasonal patterns and weather variability over time.
+                            </p>
+                            <h2>About This Project</h2>
+                            <p>
+                                Select a date from the calendar to explore daily temperature
+                                extremes and precipitation levels. This visualization helps
+                                reveal seasonal patterns and weather variability over time.
+                            </p>
+                            <h2>About This Project</h2>
+                            <p>
+                                Select a date from the calendar to explore daily temperature
+                                extremes and precipitation levels. This visualization helps
+                                reveal seasonal patterns and weather variability over time.
+                            </p>
+                            <h2>About This Project</h2>
+                            <p>
+                                Select a date from the calendar to explore daily temperature
+                                extremes and precipitation levels. This visualization helps
+                                reveal seasonal patterns and weather variability over time.
+                            </p>
+                        </div>
+
+                        {/* RIGHT VISUAL CONTENT */}
+                        <div className="visual-panel">
+
+                            {/* Calendar + Day Info */}
+                            <div className="calendar-row">
+                                <div className="calendar-wrapper">
+                                    <DatePicker
+                                        value={selectedDate}
+                                        onChange={setSelectedDate}
+                                        defaultDate={new Date(2010, 0, 1)}
+                                        minDate={new Date(2010, 0, 1)}
+                                        maxDate={new Date(2023, 11, 31)}
+                                    />
                                 </div>
-                                <div className="day-info-grid">
-                                    <div className="day-info-item">
-                                        <div className="day-info-label">Min</div>
-                                        <div className="day-info-value">
-                                            {((row.TMIN / 10) * 9 / 5 + 32).toFixed(1)}°F
-                                        </div>
-                                    </div>
 
-                                    <div className="day-info-item">
-                                        <div className="day-info-label">Max</div>
-                                        <div className="day-info-value">
-                                            {((row.TMAX / 10) * 9 / 5 + 32).toFixed(1)}°F
-                                        </div>
-                                    </div>
+                                <div className="day-info-card">
+                                    {row ? (
+                                        <>
+                                            <div className="day-info-date">
+                                                {dayjs(row.DATE).format("MMMM Do, YYYY")}
+                                            </div>
 
-                                    <div className="day-info-item">
-                                        <div className="day-info-label">Precip</div>
-                                        <div className="day-info-value">
-                                            {(row.PRCP / 10).toFixed(1)}
-                                            <span className="unit"> mm</span>
+                                            <div className="day-info-grid">
+                                                <div className="day-info-item">
+                                                    <div className="day-info-label">Min</div>
+                                                    <div className="day-info-value">
+                                                        {((row.TMIN / 10) * 9 / 5 + 32).toFixed(1)}°F
+                                                    </div>
+                                                </div>
+
+                                                <div className="day-info-item">
+                                                    <div className="day-info-label">Max</div>
+                                                    <div className="day-info-value">
+                                                        {((row.TMAX / 10) * 9 / 5 + 32).toFixed(1)}°F
+                                                    </div>
+                                                </div>
+
+                                                <div className="day-info-item">
+                                                    <div className="day-info-label">Precip</div>
+                                                    <div className="day-info-value">
+                                                        {(row.PRCP / 10).toFixed(1)}
+                                                        <span className="unit"> mm</span>
+                                                    </div>
+                                                    <div className="day-info-sub">
+                                                        {((row.PRCP / 10) / 25.4).toFixed(2)} in
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </>
+                                    ) : (
+                                        <div className="day-info-empty">
+                                            Pick a date to see details
                                         </div>
-                                        <div className="day-info-sub">
-                                            {((row.PRCP / 10) / 25.4).toFixed(2)} in
-                                        </div>
-                                    </div>
+                                    )}
                                 </div>
-                            </>
-                        ) : (
-                            <div className="day-info-empty">Pick a date to see details</div>
-                        )}
+                            </div>
+
+                            {/* Thermometers */}
+                            <div className="thermo-section">
+                                <Thermometer
+                                    id="min"
+                                    title="Min Temp of Day"
+                                    valueF={row ? (row.TMIN / 10) * 9 / 5 + 32 : null}
+                                />
+                                <Thermometer
+                                    id="max"
+                                    title="Max Temp of Day"
+                                    valueF={row ? (row.TMAX / 10) * 9 / 5 + 32 : null}
+                                />
+                                <PrecipitationGauge valueMM={precipMM} isSnowy={isSnowy}/>
+                            </div>
+
+                        </div>
                     </div>
-                </div>
-
-
-                <div className="thermo-section">
-                    <Thermometer
-                        id="min"
-                        title="Min Temp of Day"
-                        valueF={
-                            row ? (row.TMIN / 10) * 9 / 5 + 32 : null
-                        }
-                    />
-                    <Thermometer
-                        id="max"
-                        title="Max Temp of Day"
-                        valueF={
-                            row ? (row.TMAX / 10) * 9 / 5 + 32 : null
-                        }
-                    />
-                    <PrecipitationGauge valueMM={precipMM} isSnowy={isSnowy}/>
                 </div>
             </main>
         </>
