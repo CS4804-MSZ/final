@@ -16,11 +16,11 @@ export default function Page() {
     const [data, setData] = useState<any[]>([]);
     const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
-    useEffect(() => {
-        d3.csv("/synthetic_weather.csv").then((raw) => {
-            setData(raw.filter((d) => d.TMIN && d.TMAX));
-        });
-    }, []);
+    const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+
+    d3.csv(`${basePath}/synthetic_weather.csv`).then((raw) => {
+        setData(raw.filter((d) => d.TMIN && d.TMAX));
+    });
 
 
     // Convert DatePicker value → CSV date string
