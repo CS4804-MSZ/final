@@ -17,6 +17,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -26,19 +27,24 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-        with:
-          static_site_generator: next
-
+      # Install deps
       - name: Install dependencies
         working-directory: final-project
         run: npm ci
 
+      # Build (this runs next build + export because output: "export")
       - name: Build Next.js
         working-directory: final-project
         run: npm run build
 
+      # 🔑 THIS IS THE CRITICAL FIX
+      # Copy CSV into out/ so GitHub Pages can serve it
+      - name: Copy public data to out
+        run: |
+          mkdir -p final-project/out/data
+          cp final-project/public/data/synthetic_weather.csv final-project/out/data/
+
+      # Upload Pages artifact
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
@@ -50,6 +56,7 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
