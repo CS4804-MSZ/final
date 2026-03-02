@@ -189,6 +189,8 @@ export default function Page() {
             sel.append("option").attr("value", "").text("— choose a date —");
             sampled.forEach(d => sel.append("option").attr("value", d.DATE).text(d.DATE));
 
+            //
+
             document.getElementById("loading")!.style.display = "none";
             document.getElementById("app")!.style.display = "flex";
 
