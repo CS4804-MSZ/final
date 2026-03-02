@@ -85,9 +85,7 @@ select{background:var(--card);border:1.5px solid var(--border);border-radius:8px
                         <div className="text-panel">
                             <h2>MSZ Final Project for Data Visualization Course</h2>
                             <p>
-                                Select a date from the calendar to explore daily temperature
-                                extremes and precipitation levels. This visualization helps
-                                reveal seasonal patterns and weather variability over time.
+                                TEST TEST TEST TEST TEST TEST
                             </p>
                             <h2>About This Project</h2>
                             <p>
