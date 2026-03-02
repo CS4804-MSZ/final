@@ -26,6 +26,11 @@ jobs:
         with:
           node-version: "20"
 
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+        with:
+          static_site_generator: next
+
       - name: Install dependencies
         working-directory: final-project
         run: npm ci
@@ -34,21 +39,17 @@ jobs:
         working-directory: final-project
         run: npm run build
 
-      - name: Export static site
-        working-directory: final-project
-        run: npm run export
-
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: final-project/out
 
   deploy:
+    needs: build
+    runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
