@@ -24,13 +24,10 @@ export default function TextPanel() {
             <div className="text-panel">
                 <h2>MSZ Final Project for Data Visualization Course</h2>
                 <p>
-                    TEST TEST TEST TEST TEST TEST
-                </p>
-                <h2>About This Project</h2>
-                <p>
-                    Select a date from the calendar to explore daily temperature
-                    extremes and precipitation levels. This visualization helps
-                    reveal seasonal patterns and weather variability over time.
+                    This project was completed by Morgan Vasiliou, Skyler Lin, and Zoë Fisk for the final project of the Data Visualization
+                    course. The goal of this site is to allow users to pick any date between January 1st, 2010 and December 31st, 2023.
+                    After doing so, they see two thermometers, showing the minimum and maximum temperatures respectively. Additionally,
+                    they are shown a precipitation gauge for that day.
                 </p>
                 <h2>Instructions</h2>
                 <p>
