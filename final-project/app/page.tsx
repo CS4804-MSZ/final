@@ -52,6 +52,10 @@ main{max-width:1100px;margin:0 auto;padding:40px 24px 60px;display:flex;flex-dir
 .day-info-sub{font-size:.75rem;color:var(--muted)}
 .day-info-empty{text-align:center;font-size:.8rem;color:var(--muted)}
 .thermo-section{display:flex;justify-content:center;gap:60px}
+.thermo-card{display:flex;flex-direction:column;align-items:center;gap:12px}
+.thermo-title{font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.thermo-badge{background:var(--card);border:1.5px solid var(--border);border-radius:10px;padding:10px 20px;text-align:center}
+.freeze-line{stroke-dasharray:4,4}
 .page-shell{display:flex;justify-content:center}
 .page-layout{display:grid;grid-template-columns:minmax(420px,520px) 1fr;gap:48px;align-items:start}
 .visual-panel{display:flex;flex-direction:column;gap:20px}
