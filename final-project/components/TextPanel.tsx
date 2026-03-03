@@ -11,6 +11,9 @@ export default function TextPanel() {
                     padding: 28px;
                     line-height: 1.6
                 }
+                .text-panel h2:first-of-type {
+                  font-weight: 800;
+                }
                 .text-panel h2 {
                     font-size: 1.2rem;
                     margin: 24px 0 12px 0;
