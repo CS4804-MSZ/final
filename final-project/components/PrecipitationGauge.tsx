@@ -7,7 +7,7 @@ import { useEffect, useRef } from "react";
    Shared geometry
    ===================== */
 
-const TW = 200;
+const TW = 150;
 const TH = 500;
 const tubeW = 22;
 const tubeTopY = 60;
@@ -48,7 +48,7 @@ export default function PrecipitationGauge({
             .attr("viewBox", `0 0 ${TW} ${TH}`)
             .style("filter", "drop-shadow(3px 6px 18px rgba(0,0,0,0.1))");
 
-        const mmMax = 200;
+        const mmMax = 150;
 
         const mmToY = d3
             .scaleLinear()
@@ -132,13 +132,13 @@ export default function PrecipitationGauge({
     useEffect(() => {
         if (valueMM === null || !fillRef.current) return;
 
-        const mm = Math.max(0, Math.min(200, valueMM));
+        const mm = Math.max(0, Math.min(150, valueMM));
         const start = prevRef.current;
         const startTime = Date.now();
 
         const mmToY = d3
             .scaleLinear()
-            .domain([0, 200])
+            .domain([0, 150])
             .range([tubeBottomY, tubeTopY]);
 
         const color = isSnowy ? "#f7fbff" : "#3a54c5";
