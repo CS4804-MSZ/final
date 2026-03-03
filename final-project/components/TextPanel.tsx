@@ -49,12 +49,6 @@ export default function TextPanel() {
                     regular html/css/js, but were then turned into REACT-style code. Furthermore, d3 was used to create
                     the visualizations.
                 </p>
-                <h2>Headerrrrrrrrr</h2>
-                <p>
-                    Select a date from the calendar to explore daily temperature
-                    extremes and precipitation levels. This visualization helps
-                    reveal seasonal patterns and weather variability over time.
-                </p>
             </div>
         </>
     )

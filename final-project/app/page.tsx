@@ -57,6 +57,7 @@ main{max-width:1100px;margin:0 auto;padding:40px 24px 60px;display:flex;flex-dir
 .visual-panel{display:flex;flex-direction:column;gap:20px}
 .day-panel-column{display:flex;flex-direction:column;gap:16px;height:100%}
 .random-day-card{background:var(--card);border:2px solid var(--border);border-radius:18px;padding:18px;display:flex;align-items:center;justify-content:center}
+.mantine-DatePicker-day[data-weekend="true"] { color: var(--text) !important;}
       `}</style>
 
             <main>
