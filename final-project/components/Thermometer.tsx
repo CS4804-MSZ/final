@@ -124,6 +124,15 @@ export default function Thermometer({
             .attr("y2", fy32)
             .attr("stroke", "#3355FF");
 
+        svg
+            .append("text")
+            .attr("x", TW / 2 + tubeW / 2 + 26)
+            .attr("y", fy32 + 4)
+            .attr("font-size", "10px")
+            .attr("fill", "#3355FF")
+            .attr("alignment-baseline", "middle")
+            .text("freezing");
+
         /* ---------- bulb ---------- */
         svg
             .append("circle")
