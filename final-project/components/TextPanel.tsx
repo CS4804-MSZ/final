@@ -60,7 +60,7 @@ export default function TextPanel() {
                 <p>
                     This site was coded using the NextJS framework. Some of the elements were initially programmed in
                     regular html/css/js, but were then turned into REACT-style code. Furthermore, d3 was used to create
-                    the visualizations.
+                    the visualizations. Mantine was used for the date picker and button.
                 </p>
             </div>
         </>
