@@ -7,6 +7,7 @@ import PrecipitationGauge from "@/components/PrecipitationGauge";
 import { DatePicker, DatePickerProps } from '@mantine/dates';
 import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat";
+import TextPanel from "@/components/TextPanel";
 
 dayjs.extend(advancedFormat);
 
@@ -67,9 +68,6 @@ select{background:var(--card);border:1.5px solid var(--border);border-radius:8px
 .freeze-line{stroke-dasharray:4,4}
 .page-shell{display:flex;justify-content:center}
 .page-layout{display:grid;grid-template-columns:320px 1fr;gap:48px;align-items:start}
-.text-panel{background:var(--card);border:1.5px solid var(--border);border-radius:18px;padding:28px;line-height:1.6}
-.text-panel h2{font-size:1.2rem;margin-bottom:12px}
-.text-panel p{font-size:.9rem;color:var(--muted)}
 .visual-panel{display:flex;flex-direction:column;gap:48px}
       `}</style>
 
@@ -82,36 +80,7 @@ select{background:var(--card);border:1.5px solid var(--border);border-radius:8px
                     <div className="page-layout">
 
                         {/* LEFT TEXT AREA */}
-                        <div className="text-panel">
-                            <h2>MSZ Final Project for Data Visualization Course</h2>
-                            <p>
-                                TEST TEST TEST TEST TEST TEST
-                            </p>
-                            <h2>About This Project</h2>
-                            <p>
-                                Select a date from the calendar to explore daily temperature
-                                extremes and precipitation levels. This visualization helps
-                                reveal seasonal patterns and weather variability over time.
-                            </p>
-                            <h2>About This Project</h2>
-                            <p>
-                                Select a date from the calendar to explore daily temperature
-                                extremes and precipitation levels. This visualization helps
-                                reveal seasonal patterns and weather variability over time.
-                            </p>
-                            <h2>About This Project</h2>
-                            <p>
-                                Select a date from the calendar to explore daily temperature
-                                extremes and precipitation levels. This visualization helps
-                                reveal seasonal patterns and weather variability over time.
-                            </p>
-                            <h2>About This Project</h2>
-                            <p>
-                                Select a date from the calendar to explore daily temperature
-                                extremes and precipitation levels. This visualization helps
-                                reveal seasonal patterns and weather variability over time.
-                            </p>
-                        </div>
+                        <TextPanel/>
 
                         {/* RIGHT VISUAL CONTENT */}
                         <div className="visual-panel">
