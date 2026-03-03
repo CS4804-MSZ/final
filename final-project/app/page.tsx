@@ -39,7 +39,7 @@ export default function Page() {
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--bg:#f4efe6;--card:#fffef9;--border:#e0d9cc;--text:#1c1c1c;--muted:#999;--red:#d44032;--blue:#2c7bb6}
 body{background:var(--bg);font-family:Arial,serif;color:var(--text)}
-main{max-width:1100px;margin:0 auto;padding:40px 24px 60px;display:flex;flex-direction:column;gap:36px}
+main{max-width:1300px;margin:0 auto;padding:40px 24px 60px;display:flex;flex-direction:column;gap:36px}
 .calendar-row{display:flex;justify-content:center;align-items:stretch;gap:32px;margin-bottom:20px}
 .calendar-wrapper{background:var(--card);border:1.5px solid var(--border);border-radius:16px;padding:14px}
 .day-info-card{width:360px;background:var(--card);border:2px solid var(--border);border-radius:18px;padding:22px 26px;display:flex;flex-direction:column;gap:20px}
@@ -57,7 +57,7 @@ main{max-width:1100px;margin:0 auto;padding:40px 24px 60px;display:flex;flex-dir
 .thermo-badge{background:var(--card);border:1.5px solid var(--border);border-radius:10px;padding:10px 20px;text-align:center}
 .freeze-line{stroke-dasharray:4,4}
 .page-shell{display:flex;justify-content:center}
-.page-layout{display:grid;grid-template-columns:minmax(420px,520px) 1fr;gap:48px;align-items:start}
+.page-layout{display:grid;  grid-template-columns: minmax(600px, 1.4fr) 1fr;;gap:48px;align-items:start}
 .visual-panel{display:flex;flex-direction:column;gap:20px}
 .day-panel-column{display:flex;flex-direction:column;gap:16px;height:100%}
 .random-day-card{background:var(--card);border:2px solid var(--border);border-radius:18px;padding:18px;display:flex;align-items:center;justify-content:center}
