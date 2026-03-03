@@ -24,14 +24,24 @@ export default function TextPanel() {
             <div className="text-panel">
                 <h2>MSZ Final Project for Data Visualization Course</h2>
                 <p>
-                    This project was completed by Morgan Vasiliou, Skyler Lin, and Zoë Fisk for the final project of the Data Visualization
-                    course. The goal of this site is to allow users to pick any date between January 1st, 2010 and December 31st, 2023.
-                    After doing so, they see two thermometers, showing the minimum and maximum temperatures respectively. Additionally,
+                    This project was completed by Morgan Vasiliou, Skyler Lin, and Zoë Fisk for the final project of the
+                    Data Visualization
+                    course. After doing so, they see two thermometers, showing the minimum and maximum temperatures
+                    respectively. Additionally,
                     they are shown a precipitation gauge for that day.
                 </p>
                 <h2>Instructions</h2>
                 <p>
-                    instructions here
+                    Select a date on the calendar (or click “Pick Random Day”) to view historical weather data between
+                    January 1, 2010 and December 31, 2023.
+                    The thermometers display the minimum and maximum temperatures for the selected day. The gauge shows
+                    the total precipitation recorded on that date.
+                </p>
+                <h2>Future Steps</h2>
+                <p>
+                    In future iterations, we want to expand this project beyond historical weather viewing into an interactive tool that strengthens data literacy skills.
+                    We plan to incorporate guided explanations, trend comparisons, and analytics features to help users better interpret temperature ranges and precipitation.
+                    Ultimately, our goal is to use this visualization as an accessible entry point into the data visualization sector!
                 </p>
                 <h2>Our Goal</h2>
                 <p>
