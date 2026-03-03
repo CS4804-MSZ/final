@@ -67,13 +67,9 @@ select{background:var(--card);border:1.5px solid var(--border);border-radius:8px
 .thermo-badge{background:var(--card);border:1.5px solid var(--border);border-radius:10px;padding:10px 20px;text-align:center}
 .freeze-line{stroke-dasharray:4,4}
 .page-shell{display:flex;justify-content:center}
-.page-layout{display:grid;grid-template-columns:320px 1fr;gap:48px;align-items:start}
+.page-layout{display:grid;  grid-template-columns:minmax(420px, 520px) 1fr;;gap:48px;align-items:start}
 .visual-panel{display:flex;flex-direction:column;gap:48px}
       `}</style>
-
-            {/*<header>*/}
-            {/*    <h1>Data Vis Temp Prj</h1>*/}
-            {/*</header>*/}
 
             <main>
                 <div className="page-shell">
