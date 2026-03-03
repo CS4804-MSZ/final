@@ -43,13 +43,13 @@ export default function TextPanel() {
                     past data, this visualization type could be applied to forecasted
                     temperature and precipitation data in future iterations.
                 </p>
-                <h2>About This Project</h2>
+                <h2>Process</h2>
                 <p>
-                    Select a date from the calendar to explore daily temperature
-                    extremes and precipitation levels. This visualization helps
-                    reveal seasonal patterns and weather variability over time.
+                    This site was coded using the NextJS framework. Some of the elements were initially programmed in
+                    regular html/css/js, but were then turned into REACT-style code. Furthermore, d3 was used to create
+                    the visualizations.
                 </p>
-                <h2>About This Project</h2>
+                <h2>Headerrrrrrrrr</h2>
                 <p>
                     Select a date from the calendar to explore daily temperature
                     extremes and precipitation levels. This visualization helps
