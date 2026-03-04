@@ -79,7 +79,7 @@ main{max-width:1300px;margin:0 auto;padding:40px 24px 60px;display:flex;flex-dir
 .day-info-item{display:flex;flex-direction:column;align-items:center;gap:6px}
 .day-info-label{font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
 .day-info-value{font-size:1.2rem;font-weight:700}
-.day-info-value .unit{font-size:.75rem;font-weight:500;color:var(--muted)}
+.day-info-value .unit{font-size:.75rem;font-weight:700;color:var(--muted)}
 .day-info-sub{font-size:.75rem;color:var(--muted)}
 .day-info-empty{text-align:center;font-size:.8rem;color:var(--muted)}
 .thermo-section{display:flex;justify-content:center;gap:60px}
@@ -167,23 +167,30 @@ main{max-width:1300px;margin:0 auto;padding:40px 24px 60px;display:flex;flex-dir
                                                     <div className="day-info-item">
                                                         <div className="day-info-label">Min</div>
                                                         <div className="day-info-value">
-                                                            {((row.TMIN / 10) * 9 / 5 + 32).toFixed(1)}°F
+                                                            {((row.TMIN / 10) * 9 / 5 + 32).toFixed(1)}° F
+                                                        </div>
+                                                        <div className="day-info-sub">
+                                                            {(row.TMIN / 10).toFixed(1)}° C
                                                         </div>
                                                     </div>
 
                                                     <div className="day-info-item">
                                                         <div className="day-info-label">Max</div>
                                                         <div className="day-info-value">
-                                                            {((row.TMAX / 10) * 9 / 5 + 32).toFixed(1)}°F
+                                                            {((row.TMAX / 10) * 9 / 5 + 32).toFixed(1)}° F
+                                                        </div>
+                                                        <div className="day-info-sub">
+                                                            {(row.TMAX / 10).toFixed(1)}° C
                                                         </div>
                                                     </div>
 
                                                     <div className="day-info-item">
                                                         <div className="day-info-label">Precip</div>
+
                                                         <div className="day-info-value">
-                                                            {((row.PRCP / 10) / 25.4).toFixed(2)}
-                                                            <span className="unit"> in</span>
+                                                            {((row.PRCP / 10) / 25.4).toFixed(2)} in
                                                         </div>
+
                                                         <div className="day-info-sub">
                                                             {(row.PRCP / 10).toFixed(1)} mm
                                                         </div>

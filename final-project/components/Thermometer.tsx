@@ -333,8 +333,8 @@ export default function Thermometer({
                     <svg ref={svgRef} />
 
                     <div className={`thermo-badge ${valueF !== null && valueF >= 32 ? "badge-hot" : "badge-cold"}`}>
-                        <div className="f-val">{valueF === null ? "—" : `${valueF.toFixed(1)}°F`}</div>
-                        <div className="c-val">{valueF === null ? "—" : `${fToC(valueF).toFixed(1)}°C`}</div>
+                        <div className="f-val">{valueF === null ? "—" : `${valueF.toFixed(1)}° F`}</div>
+                        <div className="c-val">{valueF === null ? "—" : `${fToC(valueF).toFixed(1)}° C`}</div>
                     </div>
                 </div>
             </>
