@@ -14,7 +14,11 @@ export function getWeatherQuote(tempF: number, precipMM: number) {
         return random(weatherQuotes.cold);
     }
 
-    if (tempF < 75) {
+    if (tempF < 65) {
+        return random(weatherQuotes.cool);
+    }
+
+    if (tempF < 80) {
         return random(weatherQuotes.warm);
     }
 
