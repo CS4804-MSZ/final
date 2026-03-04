@@ -2,38 +2,52 @@
 
 import * as d3 from "d3";
 import { useEffect, useRef } from "react";
-import {useDisclosure} from "@mantine/hooks";
-import {ActionIcon, Modal, Tooltip} from "@mantine/core";
-import {IconInfoCircle} from "@tabler/icons-react";
+import { useDisclosure } from "@mantine/hooks";
+import { ActionIcon, Modal, Tooltip } from "@mantine/core";
+import { IconInfoCircle } from "@tabler/icons-react";
 import PrecipitationChart from "./PrecipitationChart";
 
 /* =====================
-   Shared geometry
-   ===================== */
+   Geometry
+===================== */
 
-const TW = 150;
+const TW = 170;
 const TH = 500;
-const tubeW = 22;
-const tubeTopY = 60;
-const bulbCY = TH - 60;
-const tubeBottomY = bulbCY - 28 + 4;
+
+const marginTop = 34;
+const marginBottom = 60;
+
+const tubeW = 44;
+const tubeTopY = 80;
+const tubeBottomY = 440;
 const tubeH = tubeBottomY - tubeTopY;
+
+const bottomR = tubeW / 2;
+
+/* Funnel */
+
+const funnelTopY = 40;
+const funnelLipRx = 46;
+const funnelLipRy = 10;
+
+const funnelNeckY = tubeTopY;
+const funnelNeckW = tubeW * 0.92;
 
 /* =====================
    Helpers
-   ===================== */
+===================== */
 
 const mmToIn = (mm: number) => mm / 25.4;
 
 /* =====================
    Component
-   ===================== */
+===================== */
 
 export default function PrecipitationGauge({
                                                valueMM,
                                                isSnowy,
                                                data,
-                                               selectedDate
+                                               selectedDate,
                                            }: {
     valueMM: number | null;
     isSnowy: boolean;
@@ -41,7 +55,10 @@ export default function PrecipitationGauge({
     selectedDate: string | null;
 }) {
     const svgRef = useRef<SVGSVGElement | null>(null);
-    const fillRef = useRef<d3.Selection<SVGRectElement, unknown, null, undefined> | null>(null);
+    const fillRef =
+        useRef<d3.Selection<SVGRectElement, unknown, null, undefined> | null>(
+            null
+        );
     const prevRef = useRef<number>(0);
 
     const [opened, { open, close }] = useDisclosure(false);
@@ -65,79 +82,186 @@ export default function PrecipitationGauge({
             .domain([0, mmMax])
             .range([tubeBottomY, tubeTopY]);
 
+        const cx = TW / 2;
+
+        /* =====================
+           defs
+        ===================== */
+
         const defs = svg.append("defs");
 
         const glass = defs
             .append("linearGradient")
-            .attr("id", "precip-glass")
+            .attr("id", "glass")
             .attr("x1", "0%")
             .attr("x2", "100%");
 
-        glass.append("stop").attr("offset", "0%").attr("stop-color", "#d4eaff").attr("stop-opacity", 0.9);
-        glass.append("stop").attr("offset", "40%").attr("stop-color", "#eef6ff").attr("stop-opacity", 0.5);
-        glass.append("stop").attr("offset", "100%").attr("stop-color", "#c8dff0").attr("stop-opacity", 0.7);
+        glass.append("stop").attr("offset", "0%").attr("stop-color", "#dbe8f6");
+        glass.append("stop").attr("offset", "45%").attr("stop-color", "#ffffff").attr("stop-opacity", 0.35);
+        glass.append("stop").attr("offset", "100%").attr("stop-color", "#cfe0f3");
 
-        defs
-            .append("clipPath")
-            .attr("id", "precip-clip")
-            .append("rect")
-            .attr("x", TW / 2 - tubeW / 2 + 2)
-            .attr("y", tubeTopY)
-            .attr("width", tubeW - 4)
-            .attr("height", tubeH);
+        const water = defs
+            .append("linearGradient")
+            .attr("id", "water")
+            .attr("x1", "0%")
+            .attr("x2", "0%")
+            .attr("y1", "0%")
+            .attr("y2", "100%");
 
-        // Tube background
+        water.append("stop").attr("offset", "0%").attr("stop-color", "#a8d1ff");
+        water.append("stop").attr("offset", "100%").attr("stop-color", "#3d6fd1");
+
+        /* =====================
+           Tube clip
+        ===================== */
+
+        const clip = defs.append("clipPath").attr("id", "tube-clip");
+
+        const tubeClipPath = [
+            `M ${cx - tubeW / 2 + 2} ${tubeTopY}`,
+            `L ${cx - tubeW / 2 + 2} ${tubeBottomY - bottomR}`,
+            `A ${bottomR - 2} ${bottomR - 2} 0 0 0 ${cx} ${tubeBottomY - 2}`,
+            `A ${bottomR - 2} ${bottomR - 2} 0 0 0 ${cx + tubeW / 2 - 2} ${tubeBottomY - bottomR}`,
+            `L ${cx + tubeW / 2 - 2} ${tubeTopY}`,
+            "Z",
+        ].join(" ");
+
+        clip.append("path").attr("d", tubeClipPath);
+
+        /* =====================
+           Funnel
+        ===================== */
+
         svg
-            .append("rect")
-            .attr("x", TW / 2 - tubeW / 2)
-            .attr("y", tubeTopY)
-            .attr("width", tubeW)
-            .attr("height", tubeH)
-            .attr("rx", tubeW / 2)
-            .attr("fill", "#e8f0f8")
-            .attr("stroke", "#b0c4de");
+            .append("ellipse")
+            .attr("cx", cx)
+            .attr("cy", funnelTopY)
+            .attr("rx", funnelLipRx)
+            .attr("ry", funnelLipRy)
+            .attr("fill", "#eef5ff")
+            .attr("stroke", "#a9bfd8");
 
-        // Fill
+        const funnelPath = [
+            `M ${cx - funnelLipRx} ${funnelTopY}`,
+            `Q ${cx - funnelLipRx * 0.55} ${funnelTopY + 28} ${cx - funnelNeckW / 2} ${funnelNeckY}`,
+            `L ${cx + funnelNeckW / 2} ${funnelNeckY}`,
+            `Q ${cx + funnelLipRx * 0.55} ${funnelTopY + 28} ${cx + funnelLipRx} ${funnelTopY}`,
+            "Z",
+        ].join(" ");
+
+        svg
+            .append("path")
+            .attr("d", funnelPath)
+            .attr("fill", "url(#glass)")
+            .attr("stroke", "#a9bfd8");
+
+        /* =====================
+           Tube
+        ===================== */
+
+        const tubePath = [
+            `M ${cx - tubeW / 2} ${tubeTopY}`,
+            `L ${cx - tubeW / 2} ${tubeBottomY - bottomR}`,
+            `A ${bottomR} ${bottomR} 0 0 0 ${cx} ${tubeBottomY}`,
+            `A ${bottomR} ${bottomR} 0 0 0 ${cx + tubeW / 2} ${tubeBottomY - bottomR}`,
+            `L ${cx + tubeW / 2} ${tubeTopY}`,
+            "Z",
+        ].join(" ");
+
+        svg
+            .append("path")
+            .attr("d", tubePath)
+            .attr("fill", "url(#glass)")
+            .attr("stroke", "#a9bfd8");
+
+        /* =====================
+           Water
+        ===================== */
+
         fillRef.current = svg
             .append("rect")
-            .attr("x", TW / 2 - tubeW / 2 + 2)
+            .attr("x", cx - tubeW / 2 + 2)
             .attr("y", tubeBottomY)
             .attr("width", tubeW - 4)
             .attr("height", 0)
-            .attr("clip-path", "url(#precip-clip)")
-            .attr("fill", "#9ec9f3");
+            .attr("clip-path", "url(#tube-clip)")
+            .attr("fill", "url(#water)");
 
-        // Glass overlay
+        /* =====================
+           Tube highlight
+        ===================== */
+
         svg
             .append("rect")
-            .attr("x", TW / 2 - tubeW / 2)
-            .attr("y", tubeTopY)
-            .attr("width", tubeW)
-            .attr("height", tubeH)
-            .attr("rx", tubeW / 2)
-            .attr("fill", "url(#precip-glass)")
-            .attr("stroke", "#b0c4de")
-            .attr("pointer-events", "none");
+            .attr("x", cx - tubeW / 2 + tubeW * 0.12)
+            .attr("y", tubeTopY + 8)
+            .attr("width", tubeW * 0.14)
+            .attr("height", tubeH - 16)
+            .attr("rx", 8)
+            .attr("fill", "white")
+            .attr("opacity", 0.22);
 
-        // Ticks
-        d3.range(0, mmMax + 1, 25).forEach(mm => {
+        /* =====================
+           Scale ticks
+        ===================== */
+
+        d3.range(0, mmMax + 1, 10).forEach((mm) => {
             const y = mmToY(mm);
-            svg.append("line")
-                .attr("x1", TW / 2 - tubeW / 2 - 6)
-                .attr("x2", TW / 2 - tubeW / 2 - 18)
+            const inches = mm / 25.4;
+
+            svg
+                .append("line")
+                .attr("x1", cx - tubeW / 2 - 8)
+                .attr("x2", cx - tubeW / 2 - 22)
                 .attr("y1", y)
                 .attr("y2", y)
                 .attr("stroke", "#555");
 
-            svg.append("text")
-                .attr("x", TW / 2 - tubeW / 2 - 22)
+            svg
+                .append("text")
+                .attr("x", cx - tubeW / 2 - 26)
                 .attr("y", y + 4)
                 .attr("text-anchor", "end")
                 .attr("font-size", "11px")
                 .text(mm);
+
+            svg
+                .append("line")
+                .attr("x1", cx + tubeW / 2 + 8)
+                .attr("x2", cx + tubeW / 2 + 22)
+                .attr("y1", y)
+                .attr("y2", y)
+                .attr("stroke", "#555");
+
+            svg
+                .append("text")
+                .attr("x", cx + tubeW / 2 + 26)
+                .attr("y", y + 4)
+                .attr("font-size", "11px")
+                .text(inches.toFixed(1));
         });
 
+        svg.append("text")
+            .attr("x", cx - tubeW / 2 - 26)
+            .attr("y", tubeTopY - 14)
+            .attr("text-anchor", "end")
+            .attr("font-size", "13px")
+            .attr("font-weight", "700")
+            .attr("fill", "#333")
+            .text("mm");
+
+        svg.append("text")
+            .attr("x", cx + tubeW / 2 + 26)
+            .attr("y", tubeTopY - 14)
+            .attr("font-size", "13px")
+            .attr("font-weight", "700")
+            .attr("fill", "#333")
+            .text("in");
     }, []);
+
+    /* =====================
+       Fill animation
+    ===================== */
 
     useEffect(() => {
         if (valueMM === null || !fillRef.current) return;
@@ -151,29 +275,27 @@ export default function PrecipitationGauge({
             .domain([0, 150])
             .range([tubeBottomY, tubeTopY]);
 
-        const color = isSnowy ? "#f7fbff" : "#3a54c5";
-
         function frame() {
-            const t = Math.min((Date.now() - startTime) / 1200, 1);
-            const ease = t < 0.5
-                ? 4 * t * t * t
-                : 1 - Math.pow(-2 * t + 2, 3) / 2;
+            const t = Math.min((Date.now() - startTime) / 1100, 1);
+
+            const ease =
+                t < 0.5
+                    ? 4 * t * t * t
+                    : 1 - Math.pow(-2 * t + 2, 3) / 2;
 
             const cur = start + (mm - start) * ease;
             const y = mmToY(cur);
 
             fillRef.current!
-                .attr("fill", color)
                 .attr("y", y)
-                .attr("height", tubeBottomY - y + 4);
+                .attr("height", tubeBottomY - y);
 
             if (t < 1) requestAnimationFrame(frame);
         }
 
         requestAnimationFrame(frame);
         prevRef.current = mm;
-
-    }, [valueMM, isSnowy]);
+    }, [valueMM]);
 
     return (
         <>
@@ -184,30 +306,15 @@ export default function PrecipitationGauge({
                 centered
                 size="xxl"
             >
-                <PrecipitationChart
-                    data={data}
-                    selectedDate={selectedDate}
-                />
+                <PrecipitationChart data={data} selectedDate={selectedDate} />
             </Modal>
 
             <div className="thermo-card">
-
-                <div
-                    style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 8
-                    }}
-                >
+                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                     <div className="thermo-title">Precipitation</div>
 
                     <Tooltip label="How does the precipitation hold up to the date range?">
-                        <ActionIcon
-                            variant="subtle"
-                            size="sm"
-                            radius="xl"
-                            onClick={open}
-                        >
+                        <ActionIcon variant="subtle" size="sm" radius="xl" onClick={open}>
                             <IconInfoCircle size={16} />
                         </ActionIcon>
                     </Tooltip>

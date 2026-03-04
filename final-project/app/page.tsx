@@ -1,9 +1,5 @@
 "use client";
 
-// TODO
-// swap mm and in for the precipitation
-// add imperial/metric to the gauges themselves on the other side
-
 import * as d3 from "d3";
 import React, { useEffect, useState } from "react";
 import Thermometer from "@/components/Thermometer";
