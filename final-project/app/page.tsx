@@ -1,5 +1,9 @@
 "use client";
 
+// TODO
+// swap mm and in for the precipitation
+// add imperial/metric to the gauges themselves on the other side
+
 import * as d3 from "d3";
 import React, { useEffect, useState } from "react";
 import Thermometer from "@/components/Thermometer";
@@ -38,7 +42,7 @@ export default function Page() {
             <style>{`
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--bg:#f4efe6;--card:#fffef9;--border:#e0d9cc;--text:#1c1c1c;--muted:#999;--red:#d44032;--blue:#2c7bb6}
-body{background:var(--bg);font-family:Arial,serif;color:var(--text)}
+body{background:var(--bg);font-family: 'Times New Roman', serif;,serif;color:var(--text)}
 main{max-width:1300px;margin:0 auto;padding:40px 24px 60px;display:flex;flex-direction:column;gap:36px}
 .calendar-row{display:flex;justify-content:center;align-items:stretch;gap:32px;margin-bottom:20px}
 .calendar-wrapper{background:var(--card);border:1.5px solid var(--border);border-radius:16px;padding:14px}
@@ -55,6 +59,16 @@ main{max-width:1300px;margin:0 auto;padding:40px 24px 60px;display:flex;flex-dir
 .thermo-card{display:flex;flex-direction:column;align-items:center;gap:12px}
 .thermo-title{font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
 .thermo-badge{background:var(--card);border:1.5px solid var(--border);border-radius:10px;padding:10px 20px;text-align:center}
+.thermo-badge .f-val {
+  font-size: 1.3rem;
+  font-weight: 500;
+}
+
+.thermo-badge .c-val {
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-top: 2px;
+}
 .freeze-line{stroke-dasharray:4,4}
 .page-shell{display:flex;justify-content:center}
 .page-layout{display:grid;  grid-template-columns: minmax(600px, 1.4fr) 1fr;;gap:48px;align-items:start}
@@ -62,6 +76,8 @@ main{max-width:1300px;margin:0 auto;padding:40px 24px 60px;display:flex;flex-dir
 .day-panel-column{display:flex;flex-direction:column;gap:16px;height:100%}
 .random-day-card{background:var(--card);border:2px solid var(--border);border-radius:18px;padding:18px;display:flex;align-items:center;justify-content:center}
 .mantine-DatePicker-day[data-weekend="true"] { color: var(--text) !important;}
+.badge-cold .f-val { color: var(--blue); }
+.badge-hot .f-val { color: var(--red); }
       `}</style>
 
             <main>
@@ -116,11 +132,11 @@ main{max-width:1300px;margin:0 auto;padding:40px 24px 60px;display:flex;flex-dir
                                                     <div className="day-info-item">
                                                         <div className="day-info-label">Precip</div>
                                                         <div className="day-info-value">
-                                                            {(row.PRCP / 10).toFixed(1)}
-                                                            <span className="unit"> mm</span>
+                                                            {((row.PRCP / 10) / 25.4).toFixed(2)}
+                                                            <span className="unit"> in</span>
                                                         </div>
                                                         <div className="day-info-sub">
-                                                            {((row.PRCP / 10) / 25.4).toFixed(2)} in
+                                                            {(row.PRCP / 10).toFixed(1)} mm
                                                         </div>
                                                     </div>
                                                 </div>
@@ -171,6 +187,8 @@ main{max-width:1300px;margin:0 auto;padding:40px 24px 60px;display:flex;flex-dir
                                 <PrecipitationGauge
                                     valueMM={precipMM}
                                     isSnowy={isSnowy}
+                                    data={data}
+                                    selectedDate={selectedDate}
                                 />
                             </div>
                         </div>

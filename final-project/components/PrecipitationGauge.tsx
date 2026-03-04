@@ -2,6 +2,10 @@
 
 import * as d3 from "d3";
 import { useEffect, useRef } from "react";
+import {useDisclosure} from "@mantine/hooks";
+import {ActionIcon, Modal, Tooltip} from "@mantine/core";
+import {IconInfoCircle} from "@tabler/icons-react";
+import PrecipitationChart from "./PrecipitationChart";
 
 /* =====================
    Shared geometry
@@ -26,15 +30,21 @@ const mmToIn = (mm: number) => mm / 25.4;
    ===================== */
 
 export default function PrecipitationGauge({
-                                       valueMM,
-                                       isSnowy,
-                                   }: {
+                                               valueMM,
+                                               isSnowy,
+                                               data,
+                                               selectedDate
+                                           }: {
     valueMM: number | null;
     isSnowy: boolean;
+    data: any[];
+    selectedDate: string | null;
 }) {
     const svgRef = useRef<SVGSVGElement | null>(null);
     const fillRef = useRef<d3.Selection<SVGRectElement, unknown, null, undefined> | null>(null);
     const prevRef = useRef<number>(0);
+
+    const [opened, { open, close }] = useDisclosure(false);
 
     useEffect(() => {
         if (!svgRef.current) return;
@@ -166,17 +176,56 @@ export default function PrecipitationGauge({
     }, [valueMM, isSnowy]);
 
     return (
-        <div className="thermo-card">
-            <div className="thermo-title">Precipitation</div>
-            <svg ref={svgRef} />
-            <div className="thermo-badge">
-                {valueMM === null ? "—" : (
-                    <>
-                        <div className="f-val">{valueMM.toFixed(1)} mm</div>
-                        <div className="c-val">{mmToIn(valueMM).toFixed(2)} in</div>
-                    </>
-                )}
+        <>
+            <Modal
+                opened={opened}
+                onClose={close}
+                title="Precipitation Chart For Full Date Range"
+                centered
+                size="xxl"
+            >
+                <PrecipitationChart
+                    data={data}
+                    selectedDate={selectedDate}
+                />
+            </Modal>
+
+            <div className="thermo-card">
+
+                <div
+                    style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 8
+                    }}
+                >
+                    <div className="thermo-title">Precipitation</div>
+
+                    <Tooltip label="How does the precipitation hold up to the date range?">
+                        <ActionIcon
+                            variant="subtle"
+                            size="sm"
+                            radius="xl"
+                            onClick={open}
+                        >
+                            <IconInfoCircle size={16} />
+                        </ActionIcon>
+                    </Tooltip>
+                </div>
+
+                <svg ref={svgRef} />
+
+                <div className="thermo-badge">
+                    {valueMM === null ? (
+                        "—"
+                    ) : (
+                        <>
+                            <div className="f-val">{mmToIn(valueMM).toFixed(2)} in</div>
+                            <div className="c-val">{valueMM.toFixed(1)} mm</div>
+                        </>
+                    )}
+                </div>
             </div>
-        </div>
+        </>
     );
 }

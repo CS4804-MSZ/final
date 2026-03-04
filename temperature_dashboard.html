@@ -367,7 +367,7 @@ let allData = [];
 let prevMin, prevMax;
 
 // CSV LOADDD
-d3.csv("synthetic_weather.csv").then(raw => {
+d3.csv("final-project/public/data/synthetic_weather.csv").then(raw => {
   const data = raw.map(d => ({
     DATE: d.DATE,
     TMAX: d.TMAX !== "" ? +d.TMAX / 10 * 9/5 + 32 : null,
