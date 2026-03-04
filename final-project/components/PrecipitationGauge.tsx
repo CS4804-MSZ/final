@@ -205,10 +205,15 @@ export default function PrecipitationGauge({
            Scale ticks
         ===================== */
 
+        /* =====================
+           Scale ticks
+        ===================== */
+
         d3.range(0, mmMax + 1, 10).forEach((mm) => {
             const y = mmToY(mm);
             const inches = mm / 25.4;
 
+            /* left tick */
             svg
                 .append("line")
                 .attr("x1", cx - tubeW / 2 - 8)
@@ -217,14 +222,16 @@ export default function PrecipitationGauge({
                 .attr("y2", y)
                 .attr("stroke", "#555");
 
+            /* left label (inches) */
             svg
                 .append("text")
                 .attr("x", cx - tubeW / 2 - 26)
                 .attr("y", y + 4)
                 .attr("text-anchor", "end")
                 .attr("font-size", "11px")
-                .text(mm);
+                .text(inches.toFixed(1));
 
+            /* right tick */
             svg
                 .append("line")
                 .attr("x1", cx + tubeW / 2 + 8)
@@ -233,13 +240,16 @@ export default function PrecipitationGauge({
                 .attr("y2", y)
                 .attr("stroke", "#555");
 
+            /* right label (mm) */
             svg
                 .append("text")
                 .attr("x", cx + tubeW / 2 + 26)
                 .attr("y", y + 4)
                 .attr("font-size", "11px")
-                .text(inches.toFixed(1));
+                .text(mm);
         });
+
+        /* unit titles */
 
         svg.append("text")
             .attr("x", cx - tubeW / 2 - 26)
@@ -248,7 +258,7 @@ export default function PrecipitationGauge({
             .attr("font-size", "13px")
             .attr("font-weight", "700")
             .attr("fill", "#333")
-            .text("mm");
+            .text("in");
 
         svg.append("text")
             .attr("x", cx + tubeW / 2 + 26)
@@ -256,7 +266,7 @@ export default function PrecipitationGauge({
             .attr("font-size", "13px")
             .attr("font-weight", "700")
             .attr("fill", "#333")
-            .text("in");
+            .text("mm");
     }, []);
 
     /* =====================
