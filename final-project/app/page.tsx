@@ -13,6 +13,7 @@ import { Button } from "@mantine/core";
 import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat";
 import TextPanel from "@/components/TextPanel";
+import { getWeatherQuote } from "@/utils/getWeatherQuote";
 
 dayjs.extend(advancedFormat);
 
@@ -36,6 +37,14 @@ export default function Page() {
     const isSnowy = row
         ? (row.TMAX / 10) * 9 / 5 + 32 <= 34
         : false;
+
+    const quote =
+        row
+            ? getWeatherQuote(
+                (row.TMAX / 10) * 9 / 5 + 32,
+                row.PRCP / 10
+            )
+            : null;
 
     return (
         <>
@@ -78,6 +87,20 @@ main{max-width:1300px;margin:0 auto;padding:40px 24px 60px;display:flex;flex-dir
 .mantine-DatePicker-day[data-weekend="true"] { color: var(--text) !important;}
 .badge-cold .f-val { color: var(--blue); }
 .badge-hot .f-val { color: var(--red); }
+.quote-card{
+  background:var(--card);
+  border:2px solid var(--border);
+  border-radius:18px;
+  padding:18px;
+  text-align:center;
+  font-size:.9rem;
+  font-style:italic;
+  color:#444;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:70px;
+}
       `}</style>
 
             <main>
@@ -165,6 +188,9 @@ main{max-width:1300px;margin:0 auto;padding:40px 24px 60px;display:flex;flex-dir
                                         >
                                             Pick Random Day
                                         </Button>
+                                    </div>
+                                    <div className="quote-card">
+                                        {quote ?? "Pick a date to get weather advice."}
                                     </div>
                                 </div>
                             </div>
