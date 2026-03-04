@@ -53,8 +53,30 @@ export default function Page() {
 :root{--bg:#f4efe6;--card:#fffef9;--border:#e0d9cc;--text:#1c1c1c;--muted:#999;--red:#d44032;--blue:#2c7bb6}
 body{background:var(--bg);font-family: 'Times New Roman', serif;,serif;color:var(--text)}
 main{max-width:1300px;margin:0 auto;padding:40px 24px 60px;display:flex;flex-direction:column;gap:36px}
-.calendar-row{display:flex;justify-content:center;align-items:stretch;gap:32px;margin-bottom:20px}
-.calendar-wrapper{background:var(--card);border:1.5px solid var(--border);border-radius:16px;padding:14px}
+.calendar-row{
+  display:flex;
+  justify-content:center;
+  align-items:stretch;
+  gap:32px;
+  margin-bottom:20px
+  height: 1000px;
+}
+
+.calendar-wrapper{
+  background:var(--card);
+  border:1.5px solid var(--border);
+  border-radius:16px;
+  padding:14px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  height:100%;
+}
+
+.calendar-wrapper .mantine-DatePicker-calendar{
+  width:100%;
+}
 .day-info-card{width:360px;background:var(--card);border:2px solid var(--border);border-radius:18px;padding:22px 26px;display:flex;flex-direction:column;gap:20px}
 .day-info-date{font-size:1.4rem;font-weight:700;letter-spacing:.04em;text-align:center}
 .day-info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
@@ -67,7 +89,15 @@ main{max-width:1300px;margin:0 auto;padding:40px 24px 60px;display:flex;flex-dir
 .thermo-section{display:flex;justify-content:center;gap:60px}
 .thermo-card{display:flex;flex-direction:column;align-items:center;gap:12px}
 .thermo-title{font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
-.thermo-badge{background:var(--card);border:1.5px solid var(--border);border-radius:10px;padding:10px 20px;text-align:center}
+.thermo-badge{
+  background:var(--card);
+  border:1.5px solid var(--border);
+  border-radius:10px;
+  padding:10px 20px;
+  text-align:center;
+
+  margin-top:-30px;
+}
 .thermo-badge .f-val {
   font-size: 1.3rem;
   font-weight: 500;
