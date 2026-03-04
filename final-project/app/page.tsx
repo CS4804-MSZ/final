@@ -229,16 +229,17 @@ main{max-width:1300px;margin:0 auto;padding:40px 24px 60px;display:flex;flex-dir
                                 <Thermometer
                                     id="min"
                                     title="Min Temp of Day"
-                                    valueF={
-                                        row ? (row.TMIN / 10) * 9 / 5 + 32 : null
-                                    }
+                                    valueF={row ? (row.TMIN / 10) * 9 / 5 + 32 : null}
+                                    data={data}
+                                    selectedDate={selectedDate}
                                 />
+
                                 <Thermometer
                                     id="max"
                                     title="Max Temp of Day"
-                                    valueF={
-                                        row ? (row.TMAX / 10) * 9 / 5 + 32 : null
-                                    }
+                                    valueF={row ? (row.TMAX / 10) * 9 / 5 + 32 : null}
+                                    data={data}
+                                    selectedDate={selectedDate}
                                 />
                                 <PrecipitationGauge
                                     valueMM={precipMM}

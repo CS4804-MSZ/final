@@ -2,6 +2,9 @@
 
 import * as d3 from "d3";
 import React, { useEffect, useRef, useState } from "react";
+import TemperatureChart from "./TemperatureChart";
+import {ActionIcon, Modal, Tooltip} from "@mantine/core";
+import {IconInfoCircle} from "@tabler/icons-react";
 
 const TW = 200;
 const TH = 500;
@@ -18,18 +21,27 @@ const fMax = 120;
 const fToC = (f: number) => (f - 32) * 5 / 9;
 
 export default function Thermometer({
-                         id,
-                         title,
-                         valueF,
-                     }: {
+                                        id,
+                                        title,
+                                        valueF,
+                                        data,
+                                        selectedDate,
+                                    }: {
     id: "min" | "max";
     title: string;
     valueF: number | null;
+    data: any[];
+    selectedDate: string | null;
 }) {
     const svgRef = useRef<SVGSVGElement | null>(null);
     const mercuryRef =
         useRef<d3.Selection<SVGRectElement, unknown, null, undefined> | null>(null);
     const prevRef = useRef<number | null>(null);
+
+    const [opened, setOpened] = useState(false);
+
+    const open = () => setOpened(true);
+    const close = () => setOpened(false);
 
     /* ---------- build SVG once ---------- */
     useEffect(() => {
@@ -281,15 +293,51 @@ export default function Thermometer({
 
     return (
         <>
+            <>
 
-            <div className="thermo-card">
-                <div className="thermo-title">{title}</div>
-                <svg ref={svgRef}/>
-                <div className={`thermo-badge ${valueF !== null && valueF >= 32 ? "badge-hot" : "badge-cold"}`}>
-                    <div className="f-val">{valueF === null ? "—" : `${valueF.toFixed(1)}°F`}</div>
-                    <div className="c-val">{valueF === null ? "—" : `${fToC(valueF).toFixed(1)}°C`}</div>
+                <Modal
+                    opened={opened}
+                    onClose={close}
+                    title="Temperature Chart For Full Date Range"
+                    centered
+                    size="xxl"
+                >
+                    <TemperatureChart
+                        data={data}
+                        selectedDate={selectedDate}
+                        mode={id}
+                    />
+                </Modal>
+
+                <div className="thermo-card" onClick={open} style={{ cursor: "pointer" }}>
+                    <div
+                        style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 8
+                        }}
+                    >
+                        <div className="thermo-title">{title}</div>
+
+                        <Tooltip label="How does this temperature compare across the date range?">
+                            <ActionIcon
+                                variant="subtle"
+                                size="sm"
+                                radius="xl"
+                                onClick={open}
+                            >
+                                <IconInfoCircle size={16} />
+                            </ActionIcon>
+                        </Tooltip>
+                    </div>
+                    <svg ref={svgRef} />
+
+                    <div className={`thermo-badge ${valueF !== null && valueF >= 32 ? "badge-hot" : "badge-cold"}`}>
+                        <div className="f-val">{valueF === null ? "—" : `${valueF.toFixed(1)}°F`}</div>
+                        <div className="c-val">{valueF === null ? "—" : `${fToC(valueF).toFixed(1)}°C`}</div>
+                    </div>
                 </div>
-            </div>
+            </>
         </>
     );
 }
