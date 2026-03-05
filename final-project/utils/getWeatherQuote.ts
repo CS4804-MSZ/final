@@ -3,7 +3,11 @@ import { weatherQuotes } from "./weatherQuotes";
 export function getWeatherQuote(tempF: number, precipMM: number) {
 
     if (precipMM > 20) {
-        return random(weatherQuotes.rainy);
+        return random(weatherQuotes.heavyRain);
+    }
+
+    if (precipMM > 2) {
+        return random(weatherQuotes.drizzle);
     }
 
     if (tempF <= 32) {

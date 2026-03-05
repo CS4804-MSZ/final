@@ -57,7 +57,18 @@ export const weatherQuotes = {
         "Even the wind is shivering."
     ],
 
-    rainy: [
+    drizzle: [
+        "Just enough rain to ruin a good hair day.",
+        "A light sprinkle for dramatic effect.",
+        "The sky is gently misting today.",
+        "Barely rain, but your umbrella noticed.",
+        "A polite drizzle has entered the chat.",
+        "Just enough rain to question your outfit choices.",
+        "The clouds are whispering today.",
+        "A little rain never hurt anyone. Probably."
+    ],
+
+    heavyRain: [
         "Umbrella recommended. Or just embrace chaos.",
         "Rain today. Frogs tomorrow.",
         "Nature's car wash is running.",
