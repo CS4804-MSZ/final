@@ -2,7 +2,7 @@
 
 URL to live website: https://cs4804-msz.github.io/final/
 
-URL to screencast: [insert here]
+URL to screencast: https://youtu.be/YtwD5TBUMGM
 
 Process book: https://msz-final.my.canva.site/
 
