@@ -28,11 +28,7 @@ export default function TextPanel() {
                 <h2>MSZ Final Project for Data Visualization Course</h2>
                 <p>
                     This project was completed by Morgan Vasiliou, Skyler Lin, and Zoë Fisk for the final project of the
-                    Data Visualization course. After doing so, they see two thermometers, showing the minimum and maximum temperatures
-                    respectively. Additionally, they are shown a precipitation gauge for that day.
-                </p>
-                <p>
-                    Discretion: The data used is synthetic, so it does not reference any particular place or real time. It is simply for
+                    Data Visualization course. Discretion: The data used is synthetic, so it does not reference any particular place or real time. It is simply for
                     display purposes.
                 </p>
                 <h2>Instructions</h2>
