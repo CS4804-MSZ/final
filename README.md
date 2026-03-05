@@ -4,6 +4,8 @@ URL to live website: https://cs4804-msz.github.io/final/
 
 URL to screencast: [insert here]
 
+Process book:
+
 Overview:
 * The project uses NextJS, Mantine, and d3
 * All components, utils, and app/page.tsx are made by us
