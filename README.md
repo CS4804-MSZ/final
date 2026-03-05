@@ -4,7 +4,7 @@ URL to live website: https://cs4804-msz.github.io/final/
 
 URL to screencast: [insert here]
 
-Process book:
+Process book: https://msz-final.my.canva.site/
 
 Overview:
 * The project uses NextJS, Mantine, and d3
