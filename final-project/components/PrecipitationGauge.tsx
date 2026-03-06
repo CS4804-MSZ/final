@@ -7,6 +7,10 @@ import { ActionIcon, Modal, Tooltip } from "@mantine/core";
 import { IconInfoCircle } from "@tabler/icons-react";
 import PrecipitationChart from "./PrecipitationChart";
 
+/* =====================
+   Geometry
+===================== */
+
 const TW = 170;
 const TH = 500;
 
@@ -20,6 +24,8 @@ const tubeH = tubeBottomY - tubeTopY;
 
 const bottomR = tubeW / 2;
 
+/* Funnel */
+
 const funnelTopY = 40;
 const funnelLipRx = 46;
 const funnelLipRy = 10;
@@ -27,7 +33,15 @@ const funnelLipRy = 10;
 const funnelNeckY = tubeTopY;
 const funnelNeckW = tubeW * 0.92;
 
+/* =====================
+   Helpers
+===================== */
+
 const mmToIn = (mm: number) => mm / 25.4;
+
+/* =====================
+   Component
+===================== */
 
 export default function PrecipitationGauge({
                                                valueMM,
@@ -70,6 +84,10 @@ export default function PrecipitationGauge({
 
         const cx = TW / 2;
 
+        /* =====================
+           defs
+        ===================== */
+
         const defs = svg.append("defs");
 
         const glass = defs
@@ -93,6 +111,10 @@ export default function PrecipitationGauge({
         water.append("stop").attr("offset", "0%").attr("stop-color", "#a8d1ff");
         water.append("stop").attr("offset", "100%").attr("stop-color", "#3d6fd1");
 
+        /* =====================
+           Tube clip
+        ===================== */
+
         const clip = defs.append("clipPath").attr("id", "tube-clip");
 
         const tubeClipPath = [
@@ -105,6 +127,10 @@ export default function PrecipitationGauge({
         ].join(" ");
 
         clip.append("path").attr("d", tubeClipPath);
+
+        /* =====================
+           Funnel
+        ===================== */
 
         svg
             .append("ellipse")
@@ -129,6 +155,10 @@ export default function PrecipitationGauge({
             .attr("fill", "url(#glass)")
             .attr("stroke", "#a9bfd8");
 
+        /* =====================
+           Tube
+        ===================== */
+
         const tubePath = [
             `M ${cx - tubeW / 2} ${tubeTopY}`,
             `L ${cx - tubeW / 2} ${tubeBottomY - bottomR}`,
@@ -144,6 +174,10 @@ export default function PrecipitationGauge({
             .attr("fill", "url(#glass)")
             .attr("stroke", "#a9bfd8");
 
+        /* =====================
+           Water
+        ===================== */
+
         fillRef.current = svg
             .append("rect")
             .attr("x", cx - tubeW / 2 + 2)
@@ -152,6 +186,10 @@ export default function PrecipitationGauge({
             .attr("height", 0)
             .attr("clip-path", "url(#tube-clip)")
             .attr("fill", "url(#water)");
+
+        /* =====================
+           Tube highlight
+        ===================== */
 
         svg
             .append("rect")
@@ -162,6 +200,14 @@ export default function PrecipitationGauge({
             .attr("rx", 8)
             .attr("fill", "white")
             .attr("opacity", 0.22);
+
+        /* =====================
+           Scale ticks
+        ===================== */
+
+        /* =====================
+           Scale ticks
+        ===================== */
 
         d3.range(0, mmMax + 1, 10).forEach((mm) => {
             const y = mmToY(mm);
@@ -222,6 +268,10 @@ export default function PrecipitationGauge({
             .attr("fill", "#333")
             .text("mm");
     }, []);
+
+    /* =====================
+       Fill animation
+    ===================== */
 
     useEffect(() => {
         if (valueMM === null || !fillRef.current) return;
