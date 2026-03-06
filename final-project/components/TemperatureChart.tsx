@@ -43,14 +43,10 @@ export default function TemperatureChart({
 
         const dates = data.map((d) => parseDate(d.DATE)!);
 
-        /* choose temperature set */
-
         const temps =
             mode === "min"
                 ? data.map((d) => ((+d.TMIN / 10) * 9) / 5 + 32)
                 : data.map((d) => ((+d.TMAX / 10) * 9) / 5 + 32);
-
-        /* scales */
 
         const xScale = d3
             .scaleTime()
@@ -62,19 +58,13 @@ export default function TemperatureChart({
             .domain([d3.min(temps)! - 5, d3.max(temps)! + 5])
             .range([H, 0]);
 
-        /* line generator */
-
         const line = d3
             .line<number>()
             .x((d, i) => xScale(dates[i]))
             .y((d) => yScale(d))
             .curve(d3.curveMonotoneX);
 
-        /* line color */
-
         const color = mode === "min" ? "#2c7bb6" : "#d44032";
-
-        /* draw line */
 
         g.append("path")
             .datum(temps)
@@ -82,8 +72,6 @@ export default function TemperatureChart({
             .attr("stroke", color)
             .attr("stroke-width", 2)
             .attr("d", line);
-
-        /* axes */
 
         g.append("g")
             .attr("transform", `translate(0,${H})`)
@@ -100,8 +88,6 @@ export default function TemperatureChart({
 
         g.select(".domain").attr("stroke", "#ccc");
         g.selectAll(".tick line").attr("stroke", "#e0e0e0");
-
-        /* selected date indicator */
 
         if (!selectedDate) return;
 
