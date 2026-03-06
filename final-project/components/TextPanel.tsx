@@ -37,6 +37,8 @@ export default function TextPanel() {
                     January 1, 2010 and December 31, 2023.
                     The thermometers display the minimum and maximum temperatures for the selected day. The gauge shows
                     the total precipitation recorded on that date.
+                    Additionally, you can click on the "i" icon next to each gauge to see a fully expanded temperature and precipitation chart
+                    respectively.
                 </p>
                 <h2>Future Steps</h2>
                 <p>
