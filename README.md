@@ -10,3 +10,4 @@ Overview:
 
 AI Usage:
 * Weather quotes are all written by ChatGPT
+* ChatGPT also used for simple debugging 
